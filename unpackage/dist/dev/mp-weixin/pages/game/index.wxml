@@ -1,0 +1,1 @@
+<view class="content"><canvas class="cropland_canvas" type="webgl" id="croplandCanvas" data-event-opts="{{[['touchstart',[['touchEvent',['$event']]]],['touchmove',[['touchEvent',['$event']]]],['touchend',[['touchEvent',['$event']]]],['touchcancel',[['touchEvent',['$event']]]]]}}" bindtouchstart="__e" bindtouchmove="__e" bindtouchend="__e" bindtouchcancel="__e"></canvas></view>
