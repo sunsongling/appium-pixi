@@ -55,22 +55,22 @@ var compose = {
 
 function layout() {
 	this.pixiApp;
-	
 }
 
 layout.prototype.init = function (pixiApp) {
+	pixiApp.defineRatio();
+	let coeff = pixiApp.getCoeff();
 	
 	this.pixiApp = pixiApp;
 	const bg = new pixiApp.Sprite(imgbg);
 	pixiApp.slotMachine.addChild(bg);
 	bg.anchor.set(0.5);
 	bg.x = 0;
-	bg.y = 0 + pixiApp.app.screen.height / 4 * pixiApp.coeff;
+	bg.y = 0;
 
 	const slotTrunk = new pixiApp.Container();
 	slotTrunk.sortableChildren = true;
-	slotTrunk.scale.x = 1 / pixiApp.devicePixelRatioX;
-	slotTrunk.scale.y = 1 / pixiApp.devicePixelRatioX;
+	slotTrunk.scale.set(1 + coeff*0.25);
 	pixiApp.slotMachine.addChild(slotTrunk);
 
 	const turnTable = new pixiApp.Container();
