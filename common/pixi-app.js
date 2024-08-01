@@ -5,9 +5,9 @@ const unsafeEval = require("common/unsafeEval");
 const installSpine = require("common/pixi-spine");
 const installAnimate = require("common/pixi-animate");
 const TWEEN = require("common/Tween");
-
 var coordinatesArray = [{resolution: {x: 812,y: 375}}, {resolution: {x: 375,y: 812}}];
 var measurementsObj = {"min":{"portrait":{"width":375,"height":500},"landscape":{"width":500,"height":375}},"max":{"portrait":{"width":375,"height":812},"landscape":{"width":812,"height":375}}};
+
 function pixiApp() {
 	this.PIXI = {};
 	// let selfThis;
@@ -26,16 +26,6 @@ function pixiApp() {
 }
 
 pixiApp.prototype.defineRatio = function(){
-	let info = wx.getSystemInfoSync();
-	this.sw = info.windowWidth; //获取屏幕宽高
-	this.sh = info.windowHeight; //获取屏幕宽高
-	this.ratio = info.devicePixelRatio;
-	this.canvasObj.width = info.windowWidth*info.devicePixelRatio;
-	this.canvasObj.height = info.windowHeight*info.devicePixelRatio;
-	this.app.screen.width = info.windowWidth*info.devicePixelRatio; //渲染器的宽
-	this.app.screen.height = info.windowHeight*info.devicePixelRatio; //渲染器高
-	this.canvasObj.style.width = info.windowWidth + "px";
-	this.canvasObj.style.height = info.windowHeight + "px";
 	if (this.canvasObj.width > this.canvasObj.height) {
 		this.state = 0;
 		if (this.canvasObj.width / this.canvasObj.height > 2.165) {	//宽高大于 iphoneX
@@ -86,6 +76,11 @@ pixiApp.prototype.getCoeff = function(){
 }
 
 pixiApp.prototype.init = function(canvasId, theme) {
+	let info = wx.getSystemInfoSync();
+	this.sw = info.screenWidth; //获取屏幕宽高
+	this.sh = info.windowHeight; //获取屏幕宽高
+	//this.ratio = info.devicePixelRatio;
+		
 	let that = this;
 	// 获取 canvas
 	wx.createSelectorQuery().select('#' + canvasId).fields({
@@ -95,8 +90,8 @@ pixiApp.prototype.init = function(canvasId, theme) {
 		const canvas = res[0].node;
 		that.canvasObj = canvas;
 		// 设置canvas实际宽高
-		canvas.width = that.sw / that.ratio;
-		canvas.height = that.sh / that.ratio;
+		canvas.width = that.sw ;
+		canvas.height = that.sh ;
 		// PIXI 初始化 -----start
 		that.PIXI = createPIXI(canvas, that.sw);
 		
@@ -122,13 +117,13 @@ pixiApp.prototype.init = function(canvasId, theme) {
 			'view': canvas,
 			antialias: true,
 			autoDensity: true,
-			resolution: that.ratio,
+			//resolution: that.ratio,
 			backgroundAlpha: 1
 		});
 
 		that.slotMachine = new that.PIXI.Container();
 		that.slotMachine.sortableChildren = true;
-		
+		that.defineRatio();
 		theme.init(that);
 		function animate() {
 			that.TWEEN.update();
@@ -141,7 +136,7 @@ pixiApp.prototype.init = function(canvasId, theme) {
 
 //小程序事件绑定至pixi
 pixiApp.prototype.touchEvent = function(e) {
-	console.log(e)
+	//console.log(e)
 	this.PIXI.dispatchEvent(e)
 }
 
