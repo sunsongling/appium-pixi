@@ -13,7 +13,7 @@ function pixiApp() {
 	// let selfThis;
 	this.canvasObj;
 	this.animationFrame;
-	this.slotMachine;
+	this.stage;
 	this.app = {}
 	this.sw = 0;
 	this.sh = 0;
@@ -29,45 +29,45 @@ pixiApp.prototype.defineRatio = function(){
 	if (this.canvasObj.width > this.canvasObj.height) {
 		this.state = 0;
 		if (this.canvasObj.width / this.canvasObj.height > 2.165) {	//宽高大于 iphoneX
-			this.slotMachine.scale.x = this.canvasObj.width / measurementsObj['max']['landscape']['width']; //812
-			this.slotMachine.scale.y = this.canvasObj.height / measurementsObj['max']['landscape']['height'];//375
+			this.stage.scale.x = this.canvasObj.width / measurementsObj['max']['landscape']['width']; //812
+			this.stage.scale.y = this.canvasObj.height / measurementsObj['max']['landscape']['height'];//375
 		} else if (this.canvasObj.width / this.canvasObj.height < 1.333) { //宽高比小于 ipad
-			this.slotMachine.scale.x = this.canvasObj.width / measurementsObj['min']['landscape']['width']; //500
-			this.slotMachine.scale.y = this.canvasObj.height / measurementsObj['min']['landscape']['height']; //375
+			this.stage.scale.x = this.canvasObj.width / measurementsObj['min']['landscape']['width']; //500
+			this.stage.scale.y = this.canvasObj.height / measurementsObj['min']['landscape']['height']; //375
 		} else {
 			var A = (2.165 - this.canvasObj.width / this.canvasObj.height) / 0.832 * (measurementsObj['max']['landscape']['width'] - measurementsObj['min']['landscape']['width']);
-			this.slotMachine.scale.x = this.canvasObj.width / (measurementsObj['max']['landscape']['width'] - A);
-			this.slotMachine.scale.y = this.slotMachine.scale.x;
+			this.stage.scale.x = this.canvasObj.width / (measurementsObj['max']['landscape']['width'] - A);
+			this.stage.scale.y = this.stage.scale.x;
 		}
-		this.slotMachine.y = this.canvasObj.height/2;
-		this.slotMachine.x = this.canvasObj.width /2;
+		this.stage.y = this.canvasObj.height/2;
+		this.stage.x = this.canvasObj.width /2;
 	} else {
 		this.state = 1;
 		if (this.canvasObj.height / this.canvasObj.width > 2.165) {
-			this.slotMachine.scale.x = this.canvasObj.width / measurementsObj['max']['portrait']['width'];
-			this.slotMachine.scale.y = this.canvasObj.height / measurementsObj['max']['portrait']['height'];
+			this.stage.scale.x = this.canvasObj.width / measurementsObj['max']['portrait']['width'];
+			this.stage.scale.y = this.canvasObj.height / measurementsObj['max']['portrait']['height'];
 		} else if (this.canvasObj.height / this.canvasObj.width < 1.333) {
-			this.slotMachine.scale.x = this.canvasObj.width / measurementsObj['min']['portrait']['width'];
-			this.slotMachine.scale.y = this.canvasObj.height / measurementsObj['min']['portrait']['height'];
+			this.stage.scale.x = this.canvasObj.width / measurementsObj['min']['portrait']['width'];
+			this.stage.scale.y = this.canvasObj.height / measurementsObj['min']['portrait']['height'];
 		} else {
 			var t = (2.165 - this.canvasObj.height / this.canvasObj.width) / .832 * (measurementsObj['max']['portrait']['height'] - measurementsObj['min']['portrait']['height']);
-			this.slotMachine.scale.y = this.canvasObj.height / (measurementsObj['max']['landscape']['width'] - t);
-			this.slotMachine.scale.x = this.slotMachine.scale.y;
+			this.stage.scale.y = this.canvasObj.height / (measurementsObj['max']['landscape']['width'] - t);
+			this.stage.scale.x = this.stage.scale.y;
 		}
-		this.slotMachine.y = this.canvasObj.height/2;
-		this.slotMachine.x = this.canvasObj.width/2;
+		this.stage.y = this.canvasObj.height/2;
+		this.stage.x = this.canvasObj.width/2;
 	}
 }
 
 pixiApp.prototype.getCoeff = function(){
 	var t = 0;
 	if (0 === this.state) {
-		t = (this.canvasObj.width / this.slotMachine.scale.x - coordinatesArray[this.state].resolution.x) / 2 * this.slotMachine.scale.x / ((measurementsObj['max']['landscape']['width'] - measurementsObj['min']['landscape']['width']) / 2),
+		t = (this.canvasObj.width / this.stage.scale.x - coordinatesArray[this.state].resolution.x) / 2 * this.stage.scale.x / ((measurementsObj['max']['landscape']['width'] - measurementsObj['min']['landscape']['width']) / 2),
 		t > 1 && (t = 1),
 		t < -1 && (t = -1),
 		this.canvasObj.width / this.canvasObj.height > 2.165 && (t = 0);
 	} else {
-		t = (this.canvasObj.height / this.slotMachine.scale.y - coordinatesArray[this.state].resolution.y) / 2 * this.slotMachine.scale.y / ((measurementsObj['max']['portrait']['height'] - measurementsObj['min']['portrait']['height']) / 2),
+		t = (this.canvasObj.height / this.stage.scale.y - coordinatesArray[this.state].resolution.y) / 2 * this.stage.scale.y / ((measurementsObj['max']['portrait']['height'] - measurementsObj['min']['portrait']['height']) / 2),
 		t > 1 && (t = 1),
 		t < -1 && (t = -1),
 		this.canvasObj.height / this.canvasObj.width > 2.165 && (t = 0)
@@ -78,7 +78,7 @@ pixiApp.prototype.getCoeff = function(){
 pixiApp.prototype.init = function(canvasId, theme) {
 	let info = wx.getSystemInfoSync();
 	this.sw = info.screenWidth; //获取屏幕宽高
-	this.sh = info.windowHeight; //获取屏幕宽高
+	this.sh = info.screenHeight; //获取屏幕宽高
 	//this.ratio = info.devicePixelRatio;
 		
 	let that = this;
@@ -121,14 +121,14 @@ pixiApp.prototype.init = function(canvasId, theme) {
 			backgroundAlpha: 1
 		});
 
-		that.slotMachine = new that.PIXI.Container();
-		that.slotMachine.sortableChildren = true;
+		that.stage = new that.PIXI.Container();
+		that.stage.sortableChildren = true;
 		that.defineRatio();
 		theme.init(that);
 		function animate() {
 			that.TWEEN.update();
 			canvas.requestAnimationFrame(animate);
-			that.app.render(that.slotMachine);
+			that.app.render(that.stage);
 		}
 		animate();
 	})
