@@ -58,12 +58,10 @@ function layout() {
 }
 
 layout.prototype.init = function (pixiApp) {
-	pixiApp.defineRatio();
 	let coeff = pixiApp.getCoeff();
-	
 	this.pixiApp = pixiApp;
 	const bg = new pixiApp.Sprite(imgbg);
-	pixiApp.slotMachine.addChild(bg);
+	pixiApp.stage.addChild(bg);
 	bg.anchor.set(0.5);
 	bg.x = 0;
 	bg.y = 0;
@@ -71,7 +69,7 @@ layout.prototype.init = function (pixiApp) {
 	const slotTrunk = new pixiApp.Container();
 	slotTrunk.sortableChildren = true;
 	slotTrunk.scale.set(1 + coeff*0.25);
-	pixiApp.slotMachine.addChild(slotTrunk);
+	pixiApp.stage.addChild(slotTrunk);
 
 	const turnTable = new pixiApp.Container();
 	slotTrunk.addChild(turnTable);
@@ -129,6 +127,7 @@ layout.prototype.init = function (pixiApp) {
 	spin.interactive = true;
 	spin.scale.set(0.85);
 	spin.on('pointertap', (event) => {
+		console.log(event);
 		this.turnTableTween();
 		event.stopPropagation();
 	});
