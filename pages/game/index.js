@@ -1,7 +1,4 @@
-let zpbg = '../../static/table/bg.png'; //大转盘背景图片
-let lipin = '../../static/table/gold0.png'; //礼品图片
-let btn = '../../static/table/spin.png'; //按钮图片
-let imgbg = '../../static/table/bg.png'; //背景图片
+import assets from "./assets.js";
 const scatterConfig = [{
 		angle: 0,
 		scatter: 7,
@@ -55,12 +52,15 @@ var compose = {
 
 function layout() {
 	this.pixiApp;
+	this.compose = compose;
+	this.soundEffects = soundEffects;
 }
 
-layout.prototype.init = function (pixiApp) {
+layout.prototype.init = async function (pixiApp) {
 	let coeff = pixiApp.getCoeff();
+
 	this.pixiApp = pixiApp;
-	const bg = new pixiApp.Sprite(imgbg);
+	const bg = new pixiApp.Sprite(assets['bg.png']);
 	pixiApp.stage.addChild(bg);
 	bg.anchor.set(0.5);
 	bg.x = 0;
@@ -71,6 +71,19 @@ layout.prototype.init = function (pixiApp) {
 	slotTrunk.scale.set(1 + coeff*0.25);
 	pixiApp.stage.addChild(slotTrunk);
 
+
+	//标题
+	const title = new pixiApp.Text('旋转抽奖',{ 
+		fontFamily: 'Arial',
+	    fontSize: 30,
+	    //fontStyle: 'italic',
+	    fontWeight: 'Bold',
+	    fill: '0x000000'
+	});
+	title.y = -300;
+	pixiApp.stage.addChild(title);
+	compose.title = title;
+
 	const turnTable = new pixiApp.Container();
 	slotTrunk.addChild(turnTable);
 	turnTable.y = 0;
@@ -79,27 +92,27 @@ layout.prototype.init = function (pixiApp) {
 	compose.turnTable = turnTable;
 
 	for (let config of scatterConfig) {
-		let scatterBg = new pixiApp.Sprite('../../static/table/scatterBg' + config.bg + '.png');
+		let scatterBg = new pixiApp.Sprite(assets['scatterBg' + config.bg + '.png']);
 		scatterBg.anchor.set(0.5, 1);
 		scatterBg.angle = config.angle;
 		turnTable.addChild(scatterBg);
 	}
 
 	for (let config of scatterConfig) {
-		let line = new pixiApp.Sprite('../../static/table/line.png');
+		let line = new pixiApp.Sprite(assets['line.png']);
 		line.anchor.set(0.5, 1);
 		line.angle = config.angle + 20;
 		turnTable.addChild(line);
 	}
 
-	const wheel = new pixiApp.Sprite('../../static/table/wheel.png');
+	const wheel = new pixiApp.Sprite(assets['wheel.png']);
 	wheel.anchor.set(0.5);
 	wheel.y = -8.25;
 	slotTrunk.addChild(wheel);
 
 	//灯泡
 	for (let i = -4; i < 13; i++) {
-		let lamp = new pixiApp.Sprite('../../static/table/lamp.png');
+		let lamp = new pixiApp.Sprite(assets['lamp.png']);
 		lamp.anchor.set(0.5);
 		lamp.x = Math.cos(20 * i * Math.PI / 180 + 10 * Math.PI / 180) * 219;
 		lamp.y = Math.sin(20 * i * Math.PI / 180 + 10 * Math.PI / 180) * 219 + 8;
@@ -107,19 +120,19 @@ layout.prototype.init = function (pixiApp) {
 		//lamp.blendMode = PIXI.BLEND_MODES.ADD;
 		wheel.addChild(lamp);
 		compose.lamps.push(lamp);
-		let lampDark = new pixiApp.Sprite('../../static/table/lampDark.png');
+		let lampDark = new pixiApp.Sprite(assets['lampDark.png']);
 		lampDark.anchor.set(0.5);
 		lamp.addChild(lampDark);
 		lampDark.visible = true;
 		lamp.dark = lampDark;
 	}
 
-	const core = new pixiApp.Sprite('../../static/table/core.png');
+	const core = new pixiApp.Sprite(assets['core.png']);
 	core.anchor.set(0.5);
 	slotTrunk.addChild(core);
 	compose.core = core;
 
-	const spin = new pixiApp.Sprite('../../static/table/spin.png');
+	const spin = new pixiApp.Sprite(assets['spin.png']);
 	spin.anchor.set(0.5);
 	slotTrunk.addChild(spin);
 	spin.x = 0;
