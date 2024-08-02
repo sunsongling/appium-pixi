@@ -99,12 +99,19 @@ pixiApp.prototype.init = function(canvasId, theme) {
 			let sprite = new that.PIXI.Sprite.from(url);
 			sprite.anchor.set(0.5);
 			return sprite;
-		}
+		};
 		
-		this.Container = function(){
+		that.Container = function(){
 			let container = new that.PIXI.Container();
 			return container;
-		}
+		};
+
+		that.Text = function(text,style,anchor = 0.5){
+			let _style = new that.PIXI.TextStyle(style);
+			let pixiText = new that.PIXI.Text(text, _style);
+			pixiText.anchor.set(anchor);
+			return pixiText;
+		};
 
 		unsafeEval(that.PIXI); //适配PIXI里面使用的eval函数
 		installSpine(that.PIXI); //注入Spine库
