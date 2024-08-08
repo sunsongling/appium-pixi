@@ -4,6 +4,7 @@ import {
 const unsafeEval = require("common/unsafeEval");
 const installSpine = require("common/pixi-spine");
 const installAnimate = require("common/pixi-animate");
+const installParticles = require("common/pixi-particles");
 const TWEEN = require("common/Tween");
 var coordinatesArray = [{resolution: {x: 812,y: 375}}, {resolution: {x: 375,y: 812}}];
 var measurementsObj = {"min":{"portrait":{"width":375,"height":500},"landscape":{"width":500,"height":375}},"max":{"portrait":{"width":375,"height":812},"landscape":{"width":812,"height":375}}};
@@ -23,6 +24,7 @@ function pixiApp() {
 	this.state = 1;
 	this.Sprite;
 	this.TWEEN = TWEEN;
+	this.gameLoops = [];
 }
 
 pixiApp.prototype.defineRatio = function(){
@@ -79,7 +81,6 @@ pixiApp.prototype.init = function(canvasId, theme) {
 	let info = wx.getSystemInfoSync();
 	this.sw = info.screenWidth; //获取屏幕宽高
 	this.sh = info.screenHeight; //获取屏幕宽高
-	//this.ratio = info.devicePixelRatio;
 		
 	let that = this;
 	// 获取 canvas
@@ -88,10 +89,11 @@ pixiApp.prototype.init = function(canvasId, theme) {
 		size: true
 	}).exec((res) => {
 		const canvas = res[0].node;
-		that.canvasObj = canvas;
 		// 设置canvas实际宽高
 		canvas.width = that.sw ;
 		canvas.height = that.sh ;
+
+		that.canvasObj = canvas;
 		// PIXI 初始化 -----start
 		that.PIXI = createPIXI(canvas, that.sw);
 		
@@ -116,6 +118,7 @@ pixiApp.prototype.init = function(canvasId, theme) {
 		unsafeEval(that.PIXI); //适配PIXI里面使用的eval函数
 		installSpine(that.PIXI); //注入Spine库
 		installAnimate(that.PIXI); //注入Animate库
+		installParticles(that.PIXI); //注入粒子库
 
 		// 通过view把小程序的canvas传入
 		that.app = that.PIXI.autoDetectRenderer({
@@ -136,6 +139,12 @@ pixiApp.prototype.init = function(canvasId, theme) {
 			that.TWEEN.update();
 			canvas.requestAnimationFrame(animate);
 			that.app.render(that.stage);
+			for(let fn of that.gameLoops){
+				if(typeof fn === 'function') {
+					fn();
+				}
+				
+			}
 		}
 		animate();
 	})
