@@ -1,15 +1,29 @@
 const assets = {
 	'spin.png':'../../static/table/spin.png',
-	'bg.png':'../../static/table/bg.png',
+	'bg.jpg':'../../static/table/bg.jpg',
 	'line.png':'../../static/table/line.png',
 	'scatterBg0.png':'../../static/table/scatterBg0.png',
 	'scatterBg1.png':'../../static/table/scatterBg1.png',
 	'scatterBg2.png':'../../static/table/scatterBg2.png',
 	'scatterBg3.png':'../../static/table/scatterBg3.png',
 	'core.png':'../../static/table/core.png',
-	'lamp.png':'../../static/table/lamp.png',
-	'lampDark.png':'../../static/table/lampDark.png',
 	'star.png':'../../static/table/star.png',
-	'wheel.png':'../../static/table/wheel.png'
+	'wheel.png':'../../static/table/wheel.png',
+	'curtain.png':'../../static/table/curtain.png',
+	'light.png':'../../static/table/light.png',
+	'star0.png':'../../static/table/star0.png',
+	'lampstand.png':'../../static/table/lampstand.png',
+	'lampstandStar.png':'../../static/table/lampstandStar.png',
+	'lampstandStarDark.png':'../../static/table/lampstandStarDark.png',
+	'arrow.png':'../../static/table/arrow.png',
+	'mark.png':'../../static/table/mark.png',
+	'star.png':'../../static/table/star.png',
+	'turntableBg.png':'../../static/table/turntableBg.png',
+	'winBox.png':'../../static/table/winBox.png',
+	'winBoxLight.png':'../../static/table/winBoxLight.png',
+	'circlePurpleStar.png':'../../static/table/circlePurpleStar.png',
+	'circlePurple.png':'../../static/table/circlePurple.png',
+	'circleGold.png':'../../static/table/circleGold.png',
+	'coreDark.png':'../../static/table/coreDark.png'
 }
 module.exports = assets;
