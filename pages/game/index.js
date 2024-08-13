@@ -53,6 +53,7 @@ var compose = {
 	purpleStarsStep :5, //一次跳动角度
 	stepTimes :0,
 	stepInterval:40, //时间间隔
+	hide:false
 };
 
 function layout() {
@@ -320,7 +321,9 @@ layout.prototype.init = async function (pixiApp) {
 	tableContainer.addChild(coreContainer);
 	coreContainer.interactive = true;
 	coreContainer.addListener('pointertap', (event) => {
-		console.log(event);
+		if(compose.hide) {
+			return false;
+		}
 		this.turnTableTween();
 		event.stopPropagation();
 	});
@@ -635,6 +638,18 @@ layout.prototype.init = async function (pixiApp) {
 	title.y = -300 - coeff * 70;
 	pixiApp.stage.addChild(title);
 	compose.title = title;
+
+	const setting = new pixiApp.Sprite(assets["setting.png"]);
+	setting.x = 200 - coeff * 40;
+	setting.y = -300 - coeff * 70;
+	setting.interactive = true;
+	setting.on('pointerdown', (event) => {
+		if(compose.hide) {
+			return false;
+		}
+		this.hideTween();
+		event.stopPropagation();
+	});
 }
 
 layout.prototype.turnTableTween = function () {
@@ -758,6 +773,40 @@ layout.prototype.gameLoop = function () {
 			compose.stepTimes = 0;
 		}
 	}
+}
+
+layout.prototype.hideTween = function () {
+	let that = this;
+	let tween = new that.pixiApp.TWEEN.Tween({alpha:1})
+	.to({alpha:0}, 300)
+	.easing(that.pixiApp.TWEEN.Easing.Quadratic.InOut)
+	.onStart(function(){
+		compose.hide = true;
+	})
+	.onUpdate(function(){
+		that.pixiApp.app.alpha = this.alpha;
+	})
+	.onComplete(function(){
+		that.pixiApp.app.visible = true;
+	}).start();
+}
+
+layout.prototype.showTween = function () {
+	let that = this;
+	let tween = new that.pixiApp.TWEEN.Tween({alpha:0})
+	.to({alpha:1}, 300)
+	.easing(that.pixiApp.TWEEN.Easing.Quadratic.InOut)
+	.onStart(function(){
+		that.pixiApp.app.visible = true;
+	})
+	.onUpdate(function(){
+		that.pixiApp.app.alpha = this.alpha;
+	})
+	.onComplete(function(){
+		compose.hide = false;
+		that.pixiApp.app.alpha = 1;
+		that.pixiApp.app.visible = true;
+	}).start();
 }
 
 

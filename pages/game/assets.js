@@ -24,6 +24,7 @@ const assets = {
 	'circlePurpleStar.png':'../../static/table/circlePurpleStar.png',
 	'circlePurple.png':'../../static/table/circlePurple.png',
 	'circleGold.png':'../../static/table/circleGold.png',
-	'coreDark.png':'../../static/table/coreDark.png'
+	'coreDark.png':'../../static/table/coreDark.png',
+	'setting.png':'../../static/table/setting.png',
 }
 module.exports = assets;
